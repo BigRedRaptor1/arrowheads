@@ -23,7 +23,6 @@ from .views import Dashboard, AllOrders, OrderDetails, HistoricOrderDetails, Adv
 urlpatterns = [
     path('dashboard/', Dashboard.as_view(), name='dashboard'),
     path('allorders/', AllOrders.as_view(), name='allorders'),
-    path('advanced/', Advanced.as_view(), name='advanced'),
     path('customer-experience/', CustomerExperience.as_view(), name='customer_experience'),
     path('orders/<int:pk>/', OrderDetails.as_view(), name='order-details'),
     path('historic-orders/<int:pk>/', HistoricOrderDetails.as_view(), name='historic-order-details'),

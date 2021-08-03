@@ -7,7 +7,7 @@ from django.db.models import Q
 from django.db.models import Count, Avg
 from datetime import date
 import calendar
-from customer.models import Menu, Orders, Diners, Paymentmethod, Promotions, Cart, Inventory, Recipe
+from customer.models import Menu, Orders, Diners, Paymentmethod, Promotions, Cart, Inventory, Recipe, badDay
 from .forms import InventoryForm, RecipeForm
 
 def recipe_delete(request,id):
@@ -200,8 +200,7 @@ def recipe_forms(request, id=0):
 
 
 def recipe_deletes(request,id):
-    #recipe = Recipe.objects.get(pk=id)
-    #recipe.delete()
+    
     Recipe.objects.raw('DELETE FROM deliver.Recipe WHERE pk = %s', [id])
 
     
@@ -211,31 +210,30 @@ def recipe_deletes(request,id):
 class Advanced(View):
     def get(self, request, *args, **kwargs):
 
-        #orders1 = .objects.raw('SELECT * FROM badDays')
-        #orders2 = Orders.objects.values('order_completed_at').annotate(avg_rating = Avg('rating'), count = Count("order_id")).order_by('-count')
-        #print(orders1)
+        orders1 = badDay.objects.all()
+        print(orders1)
 
-        dict = {}
-        temp = {}
-        x = []
+        #dict = {}
+        #temp = {}
+        #x = []
 
-        bad = Orders.objects.raw('SELECT * FROM Orders WHERE rating <=3')
-        for l in bad:
-            r = Cart.objects.filter(order = l.order_id)
-            for item in r:
-                x.append(item.food_item.food_item_desc)
-        print(x)
+        #bad = Orders.objects.raw('SELECT 'hour' FROM Orders WHERE rating <=3')
+        #for l in bad:
+        #    r = Cart.objects.filter(order = l.order_id)
+        #    for item in r:
+        #        x.append(item.food_item.food_item_desc)
+        #print(x)
 
-        for food in x[0:50]:
-            dict[food] = dict.get(food, 0)+1
-        print(dict)
+        #for food in x[0:50]:
+        #    dict[food] = dict.get(food, 0)+1
+        #print(dict)
 
-        temp = sorted(dict.items(), key=lambda x: x[1], reverse=True)
-        print(temp)
+        #temp = sorted(dict.items(), key=lambda x: x[1], reverse=True)
+        #print(temp)
 
         # pass total number of orders and total revenue into template
         context = {
-            'poor': temp
+            'hours': orders1
         }
 
         return render(request, 'restaurant/output1.html', context)
